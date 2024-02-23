@@ -1,0 +1,5 @@
+{
+    'example': {
+        'meow': {'~{meow1~"meeoow"}': {}, '~{meow2~"meeoow"}': {}}
+    }
+}

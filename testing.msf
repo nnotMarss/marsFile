@@ -1,0 +1,16 @@
+`[testing]
+`{meow|"meeoow"}
+`{test~("mars";"was";"here")}
+`{testing~[1"mars";2"was";3"not";4"here"]}
+`[/testing]
+` this is some weird comment
+` lol
+` mars was here
+
+[example]
+{meow|"meeoow"}
+\~{meow1|"meeoow"}
+\~{meow2|"meeoow"}
+[/example]
+
+
