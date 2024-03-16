@@ -1,5 +1,6 @@
 ` I'm an example MFC (Mars File Config) file!
 ` More on syntax in README.md!
+`
 [s~marsFile]
 {s~example/Hello World!}
 [e~marsFile]

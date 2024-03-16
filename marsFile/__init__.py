@@ -30,7 +30,7 @@ def parse(file_path):
                     if current_section.name == end_section_name:
                         current_section = None
                     else:
-                        raise ValueError("Missing or mismatched ender header:\"%s\"" % line.strip())
+                        raise ValueError("\n---\nERROR: Missing/Mismatched header: \'%s\' in line %s\n---" % (line.strip(), line_number))
                         
                 elif line.startswith('[s~'):
                     if current_section is None:
@@ -41,7 +41,7 @@ def parse(file_path):
             # Check if the line is an entry
             elif line.startswith('{'):
                 if current_section is None:
-                    raise ValueError("Entry found outside of a section:\"%s\"" % line.strip())
+                    raise ValueError("\n---\nERROR: Invalid formatting: \'%s\' in line %s\n---" % (line.strip(), line_number))
 
                 ident, rest = line[1:].split('~')  # Extract identification
                 name, value = rest.split('/')  # Extract value name and value
