@@ -5,6 +5,7 @@ If you wish, you can create libraries/modules for other programming languages!
 
 ## Syntax (1.1)
 ```
+$<1.1>
 ` I'm some random comment!
 [s~headerName]
 {s~stringType/I'm just a string value!}
@@ -17,24 +18,30 @@ If you wish, you can create libraries/modules for other programming languages!
 [e~marsFile]
 ```
 Okay-okay, for starters:
+- Version tags (`$<1.1>`) are a must on 1.1 and up
 - No empty lines, instead, use empty comments!
 - Every header (`[s~headerName]`) needs it's own ender (`[e~headerName]`)! *Don't make them alone :crying_cat_face:*
 - Never use `{}` without indicators (`s`, `c`, `n`)! :heart:
 
 This done.. now some more explanations!
 
+#### Version Tags:
+`$<...>`
+- As mentioned before, from syntax 1.1 and up they are a must, to put it simple, this is needed for the parser to check if your locally installed build is compatible with the MFC syntax version specified in that file.
+
 #### Headers:
 `[...~...]`
-First goes `s` for *starter*, or `e` for *ender*. Then goes section value, which can be anything, but **no** spaces.
+- First goes `s` for *starter*, or `e` for *ender*. Then goes section value, which can be anything, but **no** spaces.
 
 #### Entries:
 `{...~.../...}`
-First goes indicator `s` for *string*, `c` for *combo* and `n` for *number*. Then goes the entry name, which can be anything, but **no** spaces. Then goes your actual value, spaces allowed! :smile_cat:
+- First goes indicator `s` for *string*, `c` for *combo* and `n` for *number*. Then goes the entry name, which can be anything, but **no** spaces. Then goes your actual value, spaces allowed! :smile_cat:
 
 #### Comments:
-Anything after the \` will be ignored, **BUT** putting it after a *(for example)* header or entry **will** result in a syntax! :crying_cat_face:
+- Anything after the \` will be ignored, **BUT** putting it after a *(for example)* header or entry **will** result in a syntax! :crying_cat_face:
 Example of invalid use:
 ```
+$<1.1>
 [s~marsFile] `im an illegal comment
 {s~example/Hello World!}`im an illegal comment too!
 [e~marsFile]
