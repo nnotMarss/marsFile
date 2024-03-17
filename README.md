@@ -40,7 +40,7 @@ This done.. now some more explanations!
 - First goes indicator `s` for *string*, `c` for *combo* and `n` for *number*. Then goes the entry name, which can be anything, but **no** spaces. Then goes your actual value, spaces allowed! :smile_cat:
 
 #### Comments:
-- Anything after the \` will be ignored, **BUT** putting it after a *(for example)* header or entry **will** result in a syntax! :crying_cat_face:
+- Anything after the \` will be ignored, **BUT** putting it after a *(for example)* header or entry **will** result in a syntax error! :crying_cat_face:
 Example of invalid use:
 ```
 $<1.1>
