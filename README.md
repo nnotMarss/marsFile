@@ -47,3 +47,8 @@ $<1.1>
 [e~marsFile]
 ` haha, im legal!!!!!
 ```
+
+## To-do
+- Create Entries *[ETA: 1.3]*
+- Create Sections *[ETA: 1.3]*
+- Create Files *[ETA: 1.4]*
