@@ -1,11 +1,13 @@
 # Welcome to Mars File source code repository!
 ## What is this?
-Mars File is anther configuration file, for now only supported by my Python module, which itself is open-source!
+Mars File is another configuration file, for now only supported by my Python module, which itself is open-source!
 If you wish, you can create libraries/modules for other programming languages!
+But remember, MF isn't created to compete with other configuration languages, like XML, JSON, INI, YAML, etc; it's made purely to be easy to use, and straight-forward! 💟
 
-## Syntax (1.1)
+## Syntax (1.2)
+Warning, upcoming version 1.3 will change IDs of entries dramatically! Please be sure to look for changes!
 ```
-$<1.1>
+$<1.2>
 ` I'm some random comment!
 [s~headerName]
 {s~stringType/I'm just a string value!}
@@ -38,7 +40,7 @@ This done.. now some more explanations!
 - First goes indicator `s` for *string*, `c` for *combo* and `n` for *number*. Then goes the entry name, which can be anything, but **no** spaces. Then goes your actual value, spaces allowed! :smile_cat:
 
 #### Comments:
-- Anything after the \` will be ignored, **BUT** putting it after a *(for example)* header or entry **will** result in a syntax! :crying_cat_face:
+- Anything after the \` will be ignored, **BUT** putting it after a *(for example)* header or entry **will** result in a syntax error! :crying_cat_face:
 Example of invalid use:
 ```
 $<1.1>
@@ -49,6 +51,4 @@ $<1.1>
 ```
 
 ## To-do
-- Create Entries *[ETA: 1.3]*
-- Create Sections *[ETA: 1.3]*
-- Create Files *[ETA: 1.4]*
+*Will be updated later...*
