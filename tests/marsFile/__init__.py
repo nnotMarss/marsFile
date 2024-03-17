@@ -1,7 +1,8 @@
 import base64
+import base58
 class _:
-    version = '1.2'
-    supported = ['1.2']
+    version = '1.3.1'
+    supported = ['1.3', '1.3.1']
 
 class Section:
     def __init__(self, name):
@@ -16,10 +17,10 @@ class Entry:
         self.ident = ident
         self.value = value
 
-def parse(file_path): 
+def parse(filePathP): 
     """
     Args:
-        filePath (srt): Relative path to a MFC/MFC-Stylized file.
+        filePathP (str): Relative path to a MFC/MFC-Stylized file.
 
     Returns:
         data: Data block from MFC/MFC-Stylized file.
@@ -27,7 +28,7 @@ def parse(file_path):
     sections = []
     current_section = None
 
-    with open(file_path, 'r') as file:
+    with open(filePathP, 'r') as file:
         for line_number, line in enumerate(file, start=1):
             line = line.strip()
 
@@ -62,21 +63,38 @@ def parse(file_path):
 
                 ident, rest = line[1:].split('~')
                 name, value = rest.split('/')
-                if ident == 's':
-                    entry = Entry(name, value[:-1])
-                elif ident == 'c':
+                value = value[:-1]
+
+                if ident == 'sS':
+                    entry = Entry(name, str(value))
+                elif ident == 'sI':
+                    entry = Entry(name, int(value))
+                elif ident == 'sF':
+                    entry = Entry(name, float(value))
+                elif ident == "sB":
+                    entry = Entry(name, bool(value))
+                elif ident == 'sL':
                     value = value.split(';')
-                    entry = Entry(name, value[:-1])
-                elif ident == 'n':
-                    entry = Entry(name, int(value[:-1]))
-                elif ident == 'b':
+                    entry = Entry(name, value)
+                elif ident == 'bF':
                     try:
-                        entry = Entry(name, base64.b64decode(value[:-1]))
+                        entry = Entry(name, base58.b58decode(value))
+                    except TypeError:
+                        raise ValueError("\n---\nERROR: Invalid BASE58: \'%s\' in line %s" % (line, line_number))
+                elif ident == 'bU':
+                    try:
+                        entry = Entry(name, base58.b58decode(value[1:]))
+                    except TypeError:
+                        raise ValueError("\n---\nERROR: Invalid BASEURL: \'%s\' in line %s" % (line, line_number))
+                    except UnicodeDecodeError:
+                        raise ValueError("\n---\nERROR: Invalid BASEURL: \'%s\' in line %s" % (line, line_number))
+                elif ident == 'bS':
+                    try:
+                        entry = Entry(name, base64.b64decode(value))
                     except TypeError:
                         raise ValueError("\n---\nERROR: Invalid BASE64: \'%s\' in line %s" % (line, line_number))
                 else:
                     raise ValueError("\n---\nERROR: Invalid identification: \'%s\' in line %s\n---" % (ident, line_number))
-
                 if current_section is None:
                     current_section = Section(None)
                     current_section.add_header(current_section)
@@ -85,38 +103,93 @@ def parse(file_path):
                 raise ValueError("\n---\nERROR: Invalid syntax: \'%s\' in line %s\n---" % (line, line_number))
     return sections
 
-def lookUp(file: str, sectionName: str, entryName: str, inBytes: bool = True):
-    """
-    Args:
-        file (str): Takes file path.
-        sectionName (str): Takes section name present in given file.
-        entryName (str): Takes entry name present in given section, and returns it.
-
-    Returns:
-        str: _Entry value.
-    """
-    data = parse(file)
-    for section in data:
-        if section.name == sectionName:
-            for entry in section.entries:
-                if isinstance(entry, Entry) and entry.ident == entryName:
-                    if entry.value is None or entry.value == "None":
-                        raise ValueError("\n---\nERROR: Value is None!\n---")
-                    else:
-                        if inBytes:
+class lookUp:
+    def _(file: str, sectionName: str, entryName: str):
+        data = parse(file)
+        for section in data:
+            if section.name == sectionName:
+                for entry in section.entries:
+                    if isinstance(entry, Entry) and entry.ident == entryName:
+                        if entry.value is None or entry.value == "None":
+                            raise ValueError("\n---\nERROR: Value is None!\n---")
+                        else:
                             return entry.value
-                        elif not inBytes:
+
+    def sS(file: str, sectionName: str, entryName: str):
+        return str(lookUp._(file, sectionName, entryName))
+    
+    def sI(file: str, sectionName: str, entryName: str):
+        return int(lookUp._(file, sectionName, entryName))
+
+    def sF(file: str, sectionName: str, entryName: str):
+        return float(lookUp._(file, sectionName, entryName))
+    
+    def sB(file: str, sectionName: str, entryName: str):
+        return bool(lookUp._(file, sectionName, entryName))
+
+    def sL(file: str, sectionName: str, entryName: str):
+        return lookUp._(file, sectionName, entryName)
+
+    def bS(file: str, sectionName: str, entryName: str, inBytes: bool = True):
+        data = parse(file)
+        for section in data:
+            if section.name == sectionName:
+                for entry in section.entries:
+                    if isinstance(entry, Entry) and entry.ident == entryName:
+                        if entry.value is None or entry.value == "None":
+                            raise ValueError("\n---\nERROR: Value is None!\n---")
+                        else:
+                            if inBytes:
+                                return entry.value
+                            elif not inBytes:
+                                try:
+                                    return entry.value.decode('UTF-8')
+                                except AttributeError:
+                                    return entry.value
+                                except UnicodeDecodeError:
+                                    raise ValueError("\n---\nERROR: Invalid BASE64: \'%s\'" % entry.value)
+                            else:
+                                raise ValueError("\n---\nERROR: Invalid BOOL value: %s\n---" % inBytes)
+    
+    def bF(file: str, sectionName: str, entryName: str, inBytes: bool = True):
+        data = parse(file)
+        for section in data:
+            if section.name == sectionName:
+                for entry in section.entries:
+                    if isinstance(entry, Entry) and entry.ident == entryName:
+                        if entry.value is None or entry.value == "None":
+                            raise ValueError("\n---\nERROR: Value is None!\n---")
+                        else:
+                            if inBytes:
+                                return entry.value
+                            elif not inBytes:
+                                try:
+                                    return entry.value.decode('UTF-8')
+                                except AttributeError:
+                                    return entry.value
+                                except UnicodeDecodeError:
+                                    raise ValueError("\n---\nERROR: Invalid BASE58: \'%s\'" % entry.value)
+                            else:
+                                raise ValueError("\n---\nERROR: Invalid BOOL value: %s\n---" % inBytes)
+
+    def bU(file: str, sectionName: str, entryName: str):
+        data = parse(file)
+        for section in data:
+            if section.name == sectionName:
+                for entry in section.entries:
+                    if isinstance(entry, Entry) and entry.ident == entryName:
+                        if entry.value is None or entry.value == "None":
+                            raise ValueError("\n---\nERROR: Value is None!\n---")
+                        else:
                             try:
                                 return entry.value.decode('UTF-8')
                             except AttributeError:
                                 return entry.value
-                        else:
-                            raise ValueError("\n---\nERROR: Invalid BOOL value: %s\n---" % inBytes)
+                            except UnicodeDecodeError:
+                                raise ValueError("\n---\nERROR: Invalid BASEURL: \'%s\'" % entry.value)
 
-
-
-def override(file_path: str, section_name: str, entry_name: str, new_value):
-    with open(file_path, 'r') as file:
+def override(filePathO: str, section_name: str, entry_name: str, new_value):
+    with open(filePathO, 'r') as file:
         lines = file.readlines()
     entry_found = False
 
@@ -134,7 +207,7 @@ def override(file_path: str, section_name: str, entry_name: str, new_value):
                 mars_list = ""
                 for obj in new_value:
                     mars_list = mars_list+obj+";"
-                lines[i] = "{%s~%s/%s}\n" % (line.split("~")[0][-1:],entry_name,mars_list)
+                lines[i] = "{%s~%s/%s}\n" % (line.split("~")[0][-1:],entry_name,mars_list[:-1])
                 entry_found = True
                 break
             else:
@@ -144,7 +217,7 @@ def override(file_path: str, section_name: str, entry_name: str, new_value):
                 
 
     if entry_found:
-        with open(file_path, 'w') as file:
+        with open(filePathO, 'w') as file:
             file.writelines(lines)
     else:
         raise ValueError("\n---\nERROR: Entry mismatched/missing!\n---")
