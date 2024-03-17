@@ -1,6 +1,8 @@
+$<1.2>
 ` I'm an example MFC (Mars File Config) file!
 ` More on syntax in README.md!
-`
 [s~marsFile]
-{s~example/Hello World!}
+{s~example/projectMiranda}
+{b~baseTest/dGVzdGluZ2dnIGJpdGNoZXM=}
+{c~users/mercury;jupiter;saturn;}
 [e~marsFile]

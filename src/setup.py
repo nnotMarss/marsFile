@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='marsFile',
-    version='1.1',
+    version='1.2',
     packages=find_packages(),
     description='Python module for parsing .mfc config files!',
     author='m4rsfox',
