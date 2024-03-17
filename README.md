@@ -3,9 +3,10 @@
 Mars File is anther configuration file, for now only supported by my Python module, which itself is open-source!
 If you wish, you can create libraries/modules for other programming languages!
 
-## Syntax (1.1)
+## Syntax (1.2)
+Warning, upcoming version 1.3 will change IDs of entries dramatically! Please be sure to look for changes!
 ```
-$<1.1>
+$<1.2>
 ` I'm some random comment!
 [s~headerName]
 {s~stringType/I'm just a string value!}
@@ -49,6 +50,4 @@ $<1.1>
 ```
 
 ## To-do
-- Create Entries *[ETA: 1.3]*
-- Create Sections *[ETA: 1.3]*
-- Create Files *[ETA: 1.4]*
+*Will be updated later...*
