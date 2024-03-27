@@ -7,8 +7,12 @@ import os
 Prefix = sys.executable
 Stream = tim.print
 
-def Get(outputVal=""):
-    Stream(outputVal, end="")
+def Get(*args):
+    for arg in args:
+        if isinstance(arg, str):
+            Stream(arg, end="")
+        elif callable(arg):
+            arg()
     usrVal = input()
     return usrVal
 
