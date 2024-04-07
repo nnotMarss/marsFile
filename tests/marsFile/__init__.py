@@ -72,7 +72,14 @@ def parse(filePathP):
                 elif ident == 'sF':
                     entry = Entry(name, float(value))
                 elif ident == "sB":
-                    entry = Entry(name, bool(value))
+                    value = value.upper()
+                    if value == "TRUE":
+                        value = True
+                    elif value == "FALSE":
+                        value = False
+                    else:
+                        raise ValueError("\n---\nERROR: Invalid bool: \'%s\' in line %s\n---" % (line, line_number))
+                    entry = Entry(name, value)
                 elif ident == 'sL':
                     value = value.split(';')
                     entry = Entry(name, value)
@@ -125,7 +132,7 @@ class lookUp:
         return float(lookUp._(file, sectionName, entryName))
     
     def sB(file: str, sectionName: str, entryName: str):
-        return bool(lookUp._(file, sectionName, entryName))
+        return lookUp._(file, sectionName, entryName)
 
     def sL(file: str, sectionName: str, entryName: str):
         return lookUp._(file, sectionName, entryName)
